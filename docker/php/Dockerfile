@@ -17,7 +17,7 @@ RUN echo http://dl-cdn.alpinelinux.org/alpine/edge/community/ >> /etc/apk/reposi
 
 # download composer in the latest stable release, create cache folder and gitve it to www-data
 RUN curl -o composer-installer.php https://getcomposer.org/installer && \
-    php composer-installer.php --quiet --install-dir="/usr/local/bin" && \
+    php composer-installer.php --version=1.10.17 --quiet --install-dir="/usr/local/bin" && \
     ln -s /usr/local/bin/composer.phar /usr/local/bin/composer && \
     rm composer-installer.php && \
     mkdir -p /home/www-data/.composer/cache && \

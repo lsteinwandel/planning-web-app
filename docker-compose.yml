@@ -28,7 +28,6 @@ services:
       TZ: "Europe/Berlin"
       XDEBUG_CONFIG: "${XDEBUG_CONFIG:-192.168.99.1}"
     volumes:
-      - ./app:/var/www/app
       - ./bin:/var/www/bin
       - ./src:/var/www/src
       - ./vendor:/var/www/vendor-host
@@ -41,10 +40,7 @@ services:
       - composer:/home/www-data/.composer/cache
       - ./config:/var/www/config
       - ./var:/var/www/var
-      - ./var/encore:/var/www/var/encore
-      - ./.php_cs:/var/www/.php_cs
       - ./.env:/var/www/.env
-      - ./auth.json:/var/www/auth.json
       - vendor:/var/www/vendor
 
 
