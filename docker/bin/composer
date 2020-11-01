@@ -1,0 +1,10 @@
+#!/bin/bash
+# Call composer inside the container.
+
+export MSYS2_ARG_CONV_EXCL="/usr/local/bin/composer"
+CONTAINER="php"
+USER="www-data"
+CMD="php -d memory_limit=-1 /usr/local/bin/composer ${@}"
+
+# use existing or new container
+. "`dirname "$0"`/_runOrExec.sh"

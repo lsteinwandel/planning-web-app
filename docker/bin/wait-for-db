@@ -1,0 +1,15 @@
+#!/bin/bash
+# Wait for database to come up
+
+CONTAINER="php"
+USER="www-data"
+CMD="wait-for mysql:3306 -t 120"
+
+echo "Waiting for database to come up"
+
+# Check for a docker .env file first
+. "`dirname "$0"`/_checkEnv.sh"
+
+docker-compose "${DOCKER_COMPOSE_FILES[@]}" exec --user ${USER} ${CONTAINER} ${CMD}
+
+echo "Database is up"

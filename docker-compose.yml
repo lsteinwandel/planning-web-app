@@ -1,0 +1,73 @@
+version: '2.1'
+services:
+  mysql:
+    image: mariadb:10.3
+    environment:
+      MYSQL_ROOT_PASSWORD: "${DB_ROOT_PW:-root}"
+      MYSQL_DATABASE: "ezent"
+      MYSQL_USER: "${DB_USER:-user}"
+      MYSQL_PASSWORD: "${DB_PASSWORD:-password}"
+      TZ: "Europe/Berlin"
+    volumes:
+      - mysql:/var/lib/mysql
+    command:
+      - "--character-set-server=utf8mb4"
+      - "--collation-server=utf8mb4_unicode_ci"
+      - "--sort_buffer_size=1M"
+    ports:
+      - "${DB_PORT:-3307}:3306"
+
+  php:
+#    image: git.elbformat.de:4567/hannes.giesenow/ezplatform/php
+    build: ./docker/php
+    environment:
+      SYMFONY_ENV: "${SYMFONY_ENV:-prod}"
+      SYMFONY_DEBUG: "${SYMFONY_DEBUG:-0}"
+      UID: "${DOCKER_UID:-1000}"
+      GID: "${DOCKER_GID:-1000}"
+      TZ: "Europe/Berlin"
+      XDEBUG_CONFIG: "${XDEBUG_CONFIG:-192.168.99.1}"
+    volumes:
+      - ./app:/var/www/app
+      - ./bin:/var/www/bin
+      - ./src:/var/www/src
+      - ./vendor:/var/www/vendor-host
+      - ./templates:/var/www/templates
+      - ./translations:/var/www/translations
+      - ./public:/var/www/public
+      - ./migrations:/var/www/migrations
+      - ./composer.json:/var/www/composer.json
+      - ./composer.lock:/var/www/composer.lock
+      - composer:/home/www-data/.composer/cache
+      - ./config:/var/www/config
+      - ./var:/var/www/var
+      - ./var/encore:/var/www/var/encore
+      - ./.php_cs:/var/www/.php_cs
+      - ./.env:/var/www/.env
+      - ./auth.json:/var/www/auth.json
+      - vendor:/var/www/vendor
+
+
+    working_dir: /var/www
+
+  apache:
+#    image: git.elbformat.de:4567/hannes.giesenow/ezplatform/apache
+    build: ./docker/apache
+    environment:
+      UID: "${DOCKER_UID:-1000}"
+      GID: "${DOCKER_GID:-1000}"
+      TZ: "Europe/Berlin"
+    depends_on:
+      - php
+    volumes:
+        - vendor:/var/www/vendor
+        - ./public:/var/www/public
+        - ./assets:/var/www/assets
+    working_dir: /var/www
+    ports:
+      - "${WEB_PORT:-8080}:80"
+
+volumes:
+  composer:
+  vendor:
+  mysql:

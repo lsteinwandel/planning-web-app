@@ -1,0 +1,7 @@
+#!/bin/bash
+# Start all required containers
+
+# Check for a docker .env file first
+. "`dirname "$0"`/_checkEnv.sh"
+
+docker-compose "${DOCKER_COMPOSE_FILES[@]}" up -d

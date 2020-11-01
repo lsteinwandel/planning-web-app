@@ -1,0 +1,8 @@
+#!/bin/bash
+# Enable xdebug in running container
+
+# Check for a docker .env file first
+. "`dirname "$0"`/_checkEnv.sh"
+
+# Does not make sense with "run", so exec is required
+docker-compose "${DOCKER_COMPOSE_FILES[@]}" exec --user root php /xdebug.sh ${@}

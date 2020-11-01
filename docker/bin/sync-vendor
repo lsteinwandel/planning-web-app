@@ -1,0 +1,7 @@
+#!/bin/bash
+# sync local and docker vendor folders
+
+CONTAINER="php"
+USER="www-data"
+CMD="rsync -a --del vendor/* vendor-host/"
+. "`dirname "$0"`/_runOrExec.sh"

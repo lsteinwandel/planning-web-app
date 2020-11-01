@@ -1,0 +1,15 @@
+#!/bin/bash
+# Rebuild the containers and restart them
+
+# Check for a docker .env file first
+. "`dirname "$0"`/_checkEnv.sh"
+
+docker-compose "${DOCKER_COMPOSE_FILES[@]}" pull
+docker-compose "${DOCKER_COMPOSE_FILES[@]}" build --pull
+
+# Restart only, when already running
+RUNNING=`docker-compose ps | grep "Up "`
+if [ -n "${RUNNING}" ]; then
+    docker-compose "${DOCKER_COMPOSE_FILES[@]}" down
+    docker-compose "${DOCKER_COMPOSE_FILES[@]}" up -d
+fi
